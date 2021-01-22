@@ -7,7 +7,8 @@ const ErrorMessage = () => {
     <>
         <img src={img}></img>
         <span>Something goes wrong :(</span>
-    </>)
+    </>
+    )
 
 }
 

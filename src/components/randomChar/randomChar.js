@@ -1,58 +1,57 @@
 import React, {Component} from 'react';
 import './randomChar.css';
-import GotService from '../../services/gotService';
-import Spinner from '../spinner';
-import ErrorMessage from '../errorMessage'
+import gotService from '../../services/gotService';
+import Spinner from '../spinner/';
+import ErrorMessage from '../errorMessage/';
+
 
 export default class RandomChar extends Component {
-     
-    gotService = new GotService();
+
+    gotService = new gotService();
     state = {
-        char: {},
+        char : {},
         loading: true,
         error: false
-    }
+    };
 
     componentDidMount() {
-        console.log('mount');
         this.updateChar();
-        this.timerId = setInterval(this.updateChar, 1500);
+        // this.timerId = setInterval(this.updateChar, 1500);
     }
 
     componentWillUnmount() {
-        console.log('Unmount');
         clearInterval(this.timerId);
     }
 
     onCharLoaded = (char) => {
         this.setState({
             char,
-            loading:false,
-        })
-    }
+            loading: false
+        });
+    };
 
     onError = (err) => {
         this.setState({
-            error:true,
-            loading: true
-        })
+            error: true,
+            loading: false
+        });
     }
 
     updateChar = () => {
-        const id = Math.floor(Math.random() * 140 + 25);
-        this.gotService.getCharacter(id)
-            .then(this.onCharLoaded)
-            .catch(this.onError)
+        const id = Math.floor(Math.random()*140 + 25);
+        // const id = 130000;
+        this.gotService
+          .getCharacter(id)
+          .then(this.onCharLoaded)
+          .catch(this.onError);
     }
 
     render() {
-        console.log('render');
-
         const {char, loading, error} = this.state;
-
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
         const content = !(loading || error) ? <View char={char} /> : null;
+        
 
         return (
             <div className="random-block rounded">
@@ -65,11 +64,11 @@ export default class RandomChar extends Component {
 }
 
 const View = ({char}) => {
-
     const {name, gender, born, died, culture} = char;
-    return(
+
+    return (
         <>
-        <h4>Random Character: {name}</h4>
+            <h4>Random Character: {name}</h4>
             <ul className="list-group list-group-flush">
                 <li className="list-group-item d-flex justify-content-between">
                     <span className="term">Gender </span>
